@@ -1,21 +1,22 @@
 import { StyleSheet } from 'react-native';
+import { COLORS } from '../constants/color';
 
 export const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: COLORS.primaryBlue,
     borderRadius: 8,
     paddingBottom: 16,
     paddingHorizontal: 32,
     paddingVertical: 16,
   },
   buttonText: {
-    color: '#ffffff',
+    color: COLORS.white,
     fontSize: 18,
     fontWeight: 'bold',
   },
   container: {
     alignItems: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.white,
     flex: 1,
     justifyContent: 'center',
   },
@@ -26,7 +27,7 @@ export const styles = StyleSheet.create({
     width: 140, // 이미지를 비율 유지하면서 줄이기
   },
   logoText: {
-    color: '#2563eb',
+    color: COLORS.darkBlue,
     fontSize: 32,
     fontWeight: 'bold',
     paddingBottom: 40,

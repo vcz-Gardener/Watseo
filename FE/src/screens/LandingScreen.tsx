@@ -4,16 +4,16 @@ import { styles } from '../styles/landingScreen.styles';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { ImagePaths } from '../constants/imagePaths';
+import { LandingScreenNavigationProp } from '../navigation/types';
 
 export default function LandingScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<LandingScreenNavigationProp>>();
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../assets/Watseo.png')}
-        style={styles.logoImage}
-      />
+      <Image source={ImagePaths.logo} style={styles.logoImage} />
 
       <TouchableOpacity
         style={styles.button}
