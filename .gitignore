@@ -1,0 +1,45 @@
+# ✅ 공통 무시 항목
+*.log
+.DS_Store
+.env*
+!.env.example
+
+# ✅ IDE & Tool
+.idea/
+.vscode/
+*.iml
+
+# ✅ OS 생성 파일
+Thumbs.db
+ehthumbs.db
+
+# ✅ FE: React Native + Expo
+FE/node_modules/
+FE/dist/
+FE/build/
+FE/.expo/
+FE/.expo-shared/
+FE/.next/
+FE/web-build/
+FE/android/
+FE/ios/
+FE/coverage/
+FE/npm-debug.log
+FE/yarn-error.log
+
+# ✅ BE: Spring Boot + Gradle/Maven
+BE/target/
+BE/.gradle/
+BE/build/
+BE/out/
+BE/.classpath
+BE/.project
+BE/.settings/
+
+# ✅ EAS Build 혹은 Expo 빌드 생성물
+FE/*.apk
+FE/*.aab
+FE/*.ipa
+
+# ✅ Mac 시스템 파일
+Icon?
