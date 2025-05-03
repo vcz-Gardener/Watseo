@@ -18,6 +18,8 @@ module.exports = {
     },
     ecmaVersion: 'latest',
     sourceType: 'module',
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
   },
   plugins: ['react', 'react-native', '@typescript-eslint', 'prettier'],
   rules: {
@@ -26,8 +28,8 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react-native/no-inline-styles': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-    '@typescript-eslint/no-require-imports': 0, // require 예외 허용
-    'global-require': 'off', // global require 허용
+    '@typescript-eslint/no-require-imports': 0,
+    'global-require': 'off',
   },
   settings: {
     react: {
