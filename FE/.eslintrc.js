@@ -18,6 +18,8 @@ module.exports = {
     },
     ecmaVersion: 'latest',
     sourceType: 'module',
+    project: './tsconfig.json', // ⭐️ 여기가 핵심!
+    tsconfigRootDir: __dirname, // ⭐️ 이걸 함께 추가해야 경로가 정상 작동함
   },
   plugins: ['react', 'react-native', '@typescript-eslint', 'prettier'],
   rules: {
@@ -26,8 +28,8 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react-native/no-inline-styles': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-    '@typescript-eslint/no-require-imports': 0, // require 예외 허용
-    'global-require': 'off', // global require 허용
+    '@typescript-eslint/no-require-imports': 0,
+    'global-require': 'off',
   },
   settings: {
     react: {

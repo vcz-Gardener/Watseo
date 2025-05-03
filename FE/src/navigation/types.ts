@@ -6,8 +6,7 @@ export type RootStackParamList = {
   SignUp: undefined;
 };
 
-export type LandingScreenNavigationProp = NativeStackNavigationProp<
+export type LandingScreenNavigationProps = NativeStackNavigationProp<
   RootStackParamList,
   'Landing'
 >;
-// 추후 Screen 추가시 추가로 작성
