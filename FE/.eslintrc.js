@@ -18,8 +18,8 @@ module.exports = {
     },
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: './tsconfig.json', // ⭐️ 여기가 핵심!
-    tsconfigRootDir: __dirname, // ⭐️ 이걸 함께 추가해야 경로가 정상 작동함
+    project: ['./tsconfig.json'],
+    tsconfigRootDir: __dirname,
   },
   plugins: ['react', 'react-native', '@typescript-eslint', 'prettier'],
   rules: {
@@ -36,4 +36,12 @@ module.exports = {
       version: 'detect',
     },
   },
+  overrides: [
+    {
+      files: ['tailwind.config.js', 'postcss.config.js', '*.config.js'],
+      parserOptions: {
+        project: null, // 이 파일들에 한해 타입 체크 비활성화
+      },
+    },
+  ],
 };
