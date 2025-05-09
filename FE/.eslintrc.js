@@ -18,7 +18,7 @@ module.exports = {
     },
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: './tsconfig.json',
+    project: ['./tsconfig.json'],
     tsconfigRootDir: __dirname,
   },
   plugins: ['react', 'react-native', '@typescript-eslint', 'prettier'],
@@ -36,4 +36,12 @@ module.exports = {
       version: 'detect',
     },
   },
+  overrides: [
+    {
+      files: ['tailwind.config.js', 'postcss.config.js', '*.config.js'],
+      parserOptions: {
+        project: null, // 이 파일들에 한해 타입 체크 비활성화
+      },
+    },
+  ],
 };
