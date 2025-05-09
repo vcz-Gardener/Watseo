@@ -21,7 +21,7 @@ export default function LandingScreen({
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('SignUpCunnel')}
+        onPress={() => navigation.navigate('SignUpFunnel')}
       >
         <Text style={styles.buttonText}>회원가입</Text>
       </TouchableOpacity>
