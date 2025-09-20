@@ -118,7 +118,7 @@ supabase db reset
 ### 3. 환경 변수 설정
 `.env.local` 파일이 이미 설정되어 있습니다:
 ```
-NEXT_PUBLIC_SUPABASE_URL=https://lwqkxjjpsqcorknngwko.supabase.co
+NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 ```
 
@@ -153,8 +153,8 @@ git push -u origin main
 3. **저장소 선택**: 방금 생성한 저장소 선택
 4. **환경 변수 설정**:
    ```
-   NEXT_PUBLIC_SUPABASE_URL=https://lwqkxjjpsqcorknngwko.supabase.co
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_uYyr1kIZuRbpt3PlewAAJQ_Os1Y9shr
+   NEXT_PUBLIC_SUPABASE_URL=
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=
    ```
 5. **Deploy 버튼 클릭**
 
