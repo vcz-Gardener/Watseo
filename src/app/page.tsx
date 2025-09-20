@@ -10,10 +10,34 @@ export default function Home() {
   const [message, setMessage] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
+  const [currentSession, setCurrentSession] = useState<string | null>(null)
+  const [sessionExists, setSessionExists] = useState(true)
 
   useEffect(() => {
-    setIsModalOpen(true)
+    fetchCurrentSession()
   }, [])
+
+  const fetchCurrentSession = async () => {
+    try {
+      const response = await fetch('/api/current-session')
+      const data = await response.json()
+
+      if (data.exists) {
+        setCurrentSession(data.session.title)
+        setSessionExists(true)
+        setIsModalOpen(true)
+      } else {
+        setCurrentSession(null)
+        setSessionExists(false)
+        setMessage('오늘의 출석 세션이 없습니다. 관리자가 세션을 생성해야 합니다.')
+        setIsSuccess(false)
+      }
+    } catch (error) {
+      console.error('세션 조회 오류:', error)
+      setMessage('세션 정보를 불러올 수 없습니다.')
+      setIsSuccess(false)
+    }
+  }
 
   const handleAttendance = async (name: string) => {
     setIsLoading(true)
@@ -65,8 +89,13 @@ export default function Home() {
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">출석체크</h1>
+          {currentSession && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+              <p className="text-blue-800 font-medium">{currentSession}</p>
+            </div>
+          )}
           <p className="text-gray-600 mb-6">
-            오늘의 출석을 체크해주세요
+            {sessionExists ? '오늘의 출석을 체크해주세요' : '출석 세션이 없습니다'}
           </p>
 
           {message && (
@@ -79,7 +108,7 @@ export default function Home() {
             </div>
           )}
 
-          {!isModalOpen && (
+          {!isModalOpen && sessionExists && (
             <button
               onClick={handleReopenModal}
               className="w-full py-3 px-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
@@ -108,12 +137,14 @@ export default function Home() {
         </div>
       </div>
 
-      <AttendanceModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onSubmit={handleAttendance}
-        isLoading={isLoading}
-      />
+      {sessionExists && (
+        <AttendanceModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={handleAttendance}
+          isLoading={isLoading}
+        />
+      )}
 
       <PasswordModal
         isOpen={isPasswordModalOpen}
