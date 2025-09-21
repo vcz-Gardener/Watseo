@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
-import { getKoreanDate, formatKoreanDate } from '@/lib/utils'
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,19 +9,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '이름이 필요합니다.' }, { status: 400 })
     }
 
-    // 한국시간 기준 오늘 날짜
-    const today = getKoreanDate()
-
-    // 오늘 날짜의 출석 세션 찾기
+    // 활성 출석 세션 찾기
     const { data: session, error: sessionError } = await supabase
       .from('attendance_sessions')
       .select('id, title')
-      .eq('date', today)
+      .eq('is_active', true)
       .single()
 
     if (sessionError || !session) {
       return NextResponse.json({
-        error: '오늘의 출석 세션을 찾을 수 없습니다. 관리자가 먼저 세션을 생성해야 합니다.'
+        error: '활성화된 출석 세션이 없습니다. 관리자가 먼저 세션을 활성화해야 합니다.'
       }, { status: 404 })
     }
 

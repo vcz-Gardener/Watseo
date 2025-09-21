@@ -3,16 +3,15 @@ import { supabase } from '@/lib/supabase'
 
 export async function GET() {
   try {
-    // 오늘 날짜의 출석 세션 찾기
-    const today = new Date().toISOString().split('T')[0]
+    // 활성 출석 세션 찾기
     const { data: session, error: sessionError } = await supabase
       .from('attendance_sessions')
       .select('id')
-      .eq('date', today)
+      .eq('is_active', true)
       .single()
 
     if (sessionError || !session) {
-      return NextResponse.json({ error: '오늘의 출석 세션을 찾을 수 없습니다.' }, { status: 404 })
+      return NextResponse.json({ error: '활성화된 출석 세션을 찾을 수 없습니다.' }, { status: 404 })
     }
 
     // 모든 멤버 조회
@@ -65,16 +64,15 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: '멤버 ID가 필요합니다.' }, { status: 400 })
     }
 
-    // 오늘 날짜의 출석 세션 찾기
-    const today = new Date().toISOString().split('T')[0]
+    // 활성 출석 세션 찾기
     const { data: session, error: sessionError } = await supabase
       .from('attendance_sessions')
       .select('id')
-      .eq('date', today)
+      .eq('is_active', true)
       .single()
 
     if (sessionError || !session) {
-      return NextResponse.json({ error: '오늘의 출석 세션을 찾을 수 없습니다.' }, { status: 404 })
+      return NextResponse.json({ error: '활성화된 출석 세션을 찾을 수 없습니다.' }, { status: 404 })
     }
 
     // 기존 출석 기록이 있는지 확인

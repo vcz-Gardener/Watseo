@@ -63,13 +63,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '세션 제목이 필요합니다.' }, { status: 400 })
     }
 
-    // 오늘 날짜로 새 세션 생성
+    // 오늘 날짜로 새 세션 생성 (기본적으로 비활성 상태)
     const today = new Date().toISOString().split('T')[0]
     const { data: newSession, error: createError } = await supabase
       .from('attendance_sessions')
       .insert({
         date: today,
-        title: title.trim()
+        title: title.trim(),
+        is_active: false
       })
       .select()
       .single()
