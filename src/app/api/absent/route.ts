@@ -23,25 +23,27 @@ export async function GET() {
       return NextResponse.json({ error: '멤버 목록 조회 오류' }, { status: 500 })
     }
 
-    // 출석한 멤버들 조회
-    const { data: presentMembers, error: attendanceError } = await supabase
+    // 모든 출석 기록 조회 (출석자와 결석자 모두)
+    const { data: allAttendances, error: attendanceError } = await supabase
       .from('attendances')
-      .select('member_id, absence_reason')
+      .select('member_id, status, absence_reason')
       .eq('session_id', session.id)
 
     if (attendanceError) {
       return NextResponse.json({ error: '출석 기록 조회 오류' }, { status: 500 })
     }
 
-    // 출석한 멤버 ID 목록
-    const presentMemberIds = new Set(presentMembers?.map(a => a.member_id) || [])
+    // 출석한 멤버 ID 목록 (status가 'present'인 사람들)
+    const presentMemberIds = new Set(
+      allAttendances?.filter(a => a.status === 'present').map(a => a.member_id) || []
+    )
 
-    // 결석한 멤버들 필터링
+    // 결석한 멤버들 필터링 (출석하지 않은 모든 사람)
     const absentMembers = allMembers?.filter(member => !presentMemberIds.has(member.id)) || []
 
-    // 결석 사유가 있는 경우 추가
+    // 결석 사유가 있는 경우 추가 (status가 'absent'인 기록에서 사유 가져오기)
     const absentMembersWithReasons = absentMembers.map(member => {
-      const attendanceRecord = presentMembers?.find(a => a.member_id === member.id)
+      const attendanceRecord = allAttendances?.find(a => a.member_id === member.id)
       return {
         ...member,
         absence_reason: attendanceRecord?.absence_reason || null
