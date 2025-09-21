@@ -29,7 +29,7 @@ export default function Home() {
       } else {
         setCurrentSession(null)
         setSessionExists(false)
-        setMessage('오늘의 출석 세션이 없습니다. 관리자가 세션을 생성해야 합니다.')
+        setMessage('활성화된 출석 세션이 없습니다. 관리자가 세션을 활성화해야 합니다.')
         setIsSuccess(false)
       }
     } catch (error) {
@@ -95,7 +95,7 @@ export default function Home() {
             </div>
           )}
           <p className="text-gray-600 mb-6">
-            {sessionExists ? '오늘의 출석을 체크해주세요' : '출석 세션이 없습니다'}
+            {sessionExists ? '출석을 체크해주세요' : '활성화된 출석 세션이 없습니다'}
           </p>
 
           {message && (

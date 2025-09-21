@@ -6,6 +6,7 @@ interface AttendanceSession {
   id: string
   date: string
   title: string
+  is_active: boolean
   present_count: number
   absent_count: number
   total_count: number
@@ -16,10 +17,22 @@ export default function AdminPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isCreating, setIsCreating] = useState(false)
   const [newSessionTitle, setNewSessionTitle] = useState('')
+  const [activeSession, setActiveSession] = useState<AttendanceSession | null>(null)
 
   useEffect(() => {
     fetchSessions()
+    fetchActiveSession()
   }, [])
+
+  const fetchActiveSession = async () => {
+    try {
+      const response = await fetch('/api/admin/active-session')
+      const data = await response.json()
+      setActiveSession(data.activeSession)
+    } catch (error) {
+      console.error('활성 세션 조회 오류:', error)
+    }
+  }
 
   const fetchSessions = async () => {
     try {
@@ -58,6 +71,28 @@ export default function AdminPage() {
       console.error('세션 생성 오류:', error)
     } finally {
       setIsCreating(false)
+    }
+  }
+
+  const setActiveSessionHandler = async (sessionId: string) => {
+    try {
+      const response = await fetch('/api/admin/active-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sessionId
+        }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setActiveSession(data.activeSession)
+        fetchSessions() // 세션 목록 새로고침
+      }
+    } catch (error) {
+      console.error('활성 세션 설정 오류:', error)
     }
   }
 
@@ -102,6 +137,29 @@ export default function AdminPage() {
             </a>
           </div>
 
+          {/* 현재 활성 세션 표시 */}
+          <div className="border-t pt-6 mb-6">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">현재 활성 세션</h2>
+            {activeSession ? (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-green-800">{activeSession.title}</p>
+                    <p className="text-sm text-green-600">{formatDate(activeSession.date)}</p>
+                  </div>
+                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                    활성
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-yellow-800">활성화된 출석 세션이 없습니다.</p>
+                <p className="text-sm text-yellow-600">아래에서 세션을 생성하고 활성화하세요.</p>
+              </div>
+            )}
+          </div>
+
           <div className="border-t pt-6">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">새 출석 세션 생성</h2>
             <div className="flex space-x-3">
@@ -134,14 +192,33 @@ export default function AdminPage() {
           ) : (
             <div className="space-y-4">
               {sessions.map((session) => (
-                <div key={session.id} className="border border-gray-200 rounded-lg p-4">
+                <div key={session.id} className={`border rounded-lg p-4 ${
+                  session.is_active ? 'border-green-400 bg-green-50' : 'border-gray-200'
+                }`}>
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      {session.title}
-                    </h3>
-                    <span className="text-sm text-gray-500">
-                      {formatDate(session.date)}
-                    </span>
+                    <div className="flex items-center space-x-3">
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        {session.title}
+                      </h3>
+                      {session.is_active && (
+                        <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                          활성
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <span className="text-sm text-gray-500">
+                        {formatDate(session.date)}
+                      </span>
+                      {!session.is_active && (
+                        <button
+                          onClick={() => setActiveSessionHandler(session.id)}
+                          className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm"
+                        >
+                          활성화
+                        </button>
+                      )}
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

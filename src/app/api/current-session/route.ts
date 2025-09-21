@@ -1,23 +1,19 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
-import { getKoreanDate } from '@/lib/utils'
 
 export async function GET() {
   try {
-    // 한국시간 기준 오늘 날짜
-    const today = getKoreanDate()
-
-    // 오늘 날짜의 출석 세션 찾기
+    // 활성 출석 세션 찾기
     const { data: session, error: sessionError } = await supabase
       .from('attendance_sessions')
       .select('id, title, date')
-      .eq('date', today)
+      .eq('is_active', true)
       .single()
 
     if (sessionError || !session) {
       return NextResponse.json({
         exists: false,
-        message: '오늘의 출석 세션이 없습니다.'
+        message: '활성화된 출석 세션이 없습니다.'
       })
     }
 
