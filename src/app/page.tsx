@@ -89,13 +89,20 @@ export default function Home() {
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">출석체크</h1>
-          {currentSession && (
+
+          {currentSession ? (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
               <p className="text-blue-800 font-medium">{currentSession}</p>
             </div>
+          ) : (
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
+              <p className="text-gray-600">활성화된 출석 세션이 없습니다</p>
+              <p className="text-sm text-gray-500 mt-1">관리자가 세션을 활성화해야 합니다</p>
+            </div>
           )}
+
           <p className="text-gray-600 mb-6">
-            {sessionExists ? '출석을 체크해주세요' : '활성화된 출석 세션이 없습니다'}
+            {sessionExists ? '출석을 체크해주세요' : '관리자에게 문의하세요'}
           </p>
 
           {message && (
